@@ -22,35 +22,72 @@ A modern, responsive WordPress theme for car rental and automotive businesses, b
 
 ## Installation
 
-1. **Download and Install WordPress**
+1. **Install WordPress**
+   - Download WordPress from [wordpress.org](https://wordpress.org/download/)
+   - Set up your local environment (e.g., XAMPP, MAMP, or Local)
+   - Install WordPress following the "Famous 5-Minute Installation"
+
+2. **Install Theme via WordPress Admin**
+   - Go to WordPress Admin → Appearance → Themes
+   - Click "Add New" → "Upload Theme"
+   - Choose the autoride.zip file
+   - Click "Install Now"
+   - After installation, click "Activate"
+
+3. **Install Required Plugins**
+   - After theme activation, you'll see a notice for required plugins
+   - Click "Begin installing plugins"
+   - Select all recommended plugins
+   - Click "Install"
+   - After installation, activate all plugins
+
+4. **Theme Setup via WordPress Admin**
+   - Go to Appearance → Customize
+   - Configure theme settings:
+     - Site Identity (logo, title, tagline)
+     - Colors
+     - Typography
+     - Layout Options
+     - Menu Locations
+     - Homepage Settings
+   - Click "Publish" to save changes
+
+5. **Import Demo Content** (Optional)
+   - Go to Tools → Demo Import
+   - Click "Import Demo Data"
+   - Wait for the import to complete
+   - Your site will now look like the demo
+
+## Development Setup (Optional)
+
+If you want to customize theme assets (CSS/JS), you'll need:
+
+1. **Install Development Tools**
+   - Install [Composer](https://getcomposer.org/)
+   - Install [Node.js](https://nodejs.org/)
+
+2. **Access Theme via Terminal**
    ```bash
-   # Make sure you have WordPress installed and running
+   # Navigate to WordPress themes directory
+   cd path/to/wordpress/wp-content/themes/autoride
    ```
 
-2. **Install Theme**
-   - Download this repository
-   - Upload to `/wp-content/themes/` directory
-   - Activate the theme through WordPress admin panel
-
-3. **Install Dependencies**
+3. **Install Development Dependencies**
    ```bash
-   # Navigate to theme directory
-   cd wp-content/themes/autoride
-
-   # Install PHP dependencies
+   # Install PHP dependencies (if modifying PHP functionality)
    composer install
 
-   # Install Node dependencies
+   # Install Node dependencies (if modifying CSS/JS)
    npm install
    ```
 
-4. **Build Assets**
+4. **Work with Assets**
    ```bash
-   # Development build with watch
-   npm run dev
+   # Watch for changes during development
+   npm run watch
 
-   # Production build
-   npm run build
+   # Build for production before deploying
+   npm run production
    ```
 
 ## Configuration
