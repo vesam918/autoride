@@ -1,17 +1,19 @@
 # AutoRide WordPress Theme
 
-A modern, responsive WordPress theme for car rental and automotive businesses, built with Tailwind CSS.
+A modern, responsive WordPress theme for car rental and automotive businesses, built with Tailwind CSS and modern PHP architecture.
 
 ## Features
 
-- Modern, clean design
+- Modern, clean design with Tailwind CSS
 - Fully responsive layout
-- Built with Tailwind CSS
+- Object-oriented PHP 7.4+ architecture
+- Namespaced class structure
 - WooCommerce compatible
 - Custom booking system
 - Advanced vehicle management
 - Optimized pagination
 - Maintenance mode support
+- Modern development workflow
 
 ## Requirements
 
@@ -19,6 +21,29 @@ A modern, responsive WordPress theme for car rental and automotive businesses, b
 - PHP 7.4 or higher
 - Node.js 14.0 or higher
 - npm or yarn
+
+## Theme Architecture
+
+```
+autoride/
+├── inc/                    # PHP includes
+│   └── Theme/             # Theme namespace
+│       ├── Core/          # Core functionality
+│       │   ├── ThemeSetup.php
+│       │   ├── Post.php
+│       │   ├── Header.php
+│       │   ├── Helper.php
+│       │   ├── Validation.php
+│       │   └── WidgetArea.php
+│       ├── Admin/         # Admin functionality
+│       ├── Assets/        # Asset management
+│       ├── Features/      # Theme features
+│       └── Integration/   # Third-party integrations
+├── resources/             # Frontend source files
+│   ├── js/               # JavaScript files
+│   └── scss/             # SCSS files
+└── public/               # Compiled assets
+```
 
 ## Installation
 
@@ -41,109 +66,45 @@ A modern, responsive WordPress theme for car rental and automotive businesses, b
    - Click "Install"
    - After installation, activate all plugins
 
-4. **Theme Setup via WordPress Admin**
-   - Go to Appearance → Customize
-   - Configure theme settings:
-     - Site Identity (logo, title, tagline)
-     - Colors
-     - Typography
-     - Layout Options
-     - Menu Locations
-     - Homepage Settings
-   - Click "Publish" to save changes
+## Development
 
-5. **Import Demo Content** (Optional)
-   - Go to Tools → Demo Import
-   - Click "Import Demo Data"
-   - Wait for the import to complete
-   - Your site will now look like the demo
-
-## Development Setup (Optional)
-
-If you want to customize theme assets (CSS/JS), you'll need:
-
-1. **Install Development Tools**
-   - Install [Composer](https://getcomposer.org/)
-   - Install [Node.js](https://nodejs.org/)
-
-2. **Access Theme via Terminal**
+1. **Install Dependencies**
    ```bash
-   # Navigate to WordPress themes directory
-   cd path/to/wordpress/wp-content/themes/autoride
-   ```
-
-3. **Install Development Dependencies**
-   ```bash
-   # Install PHP dependencies (if modifying PHP functionality)
+   # Install PHP dependencies
    composer install
 
-   # Install Node dependencies (if modifying CSS/JS)
+   # Install Node dependencies
    npm install
    ```
 
-4. **Work with Assets**
+2. **Build Assets**
    ```bash
-   # Watch for changes during development
+   # Development with watch
    npm run watch
 
-   # Build for production before deploying
+   # Production build
    npm run production
    ```
 
-## Configuration
+## Theme Structure
 
-1. **Theme Settings**
-   - Go to WordPress Admin → Appearance → Customize
-   - Configure theme colors, typography, and layout options
+### Core Classes
 
-2. **WooCommerce Setup** (if using e-commerce)
-   - Install and activate WooCommerce
-   - Follow WooCommerce setup wizard
-   - Configure theme's WooCommerce integration settings
+- **ThemeSetup**: Main theme initialization and setup
+- **Post**: Handles post data and meta information
+- **Header**: Manages header rendering and configuration
+- **Helper**: Utility functions for common operations
+- **Validation**: Input validation and sanitization
+- **WidgetArea**: Widget area registration and rendering
 
-3. **Booking System**
-   - Configure booking settings in Theme Options
-   - Set up vehicle categories and availability
-   - Customize booking form fields
+### Key Features
 
-## Development
-
-### File Structure
-```
-autoride/
-├── inc/                  # PHP includes
-├── resources/           # Source files
-│   ├── js/             # JavaScript files
-│   └── scss/           # SCSS files
-├── public/             # Compiled assets
-├── template-parts/     # Template partials
-└── functions.php       # Theme functions
-```
-
-### Build Commands
-```bash
-# Watch for changes during development
-npm run watch
-
-# Build for production
-npm run production
-```
-
-## Customization
-
-1. **Styles**
-   - Edit `tailwind.config.js` for theme customization
-   - Modify SCSS files in `resources/scss/`
-   - Add custom styles to `resources/scss/app.scss`
-
-2. **Templates**
-   - Override WooCommerce templates in `woocommerce/`
-   - Modify page templates in `template-parts/`
-   - Create custom page templates in theme root
-
-3. **Functions**
-   - Add custom functionality to `functions.php`
-   - Create new functionality in `inc/` directory
+- Modern PHP architecture with namespaced classes
+- Autoloading using PSR-4 standard
+- Type declarations for better reliability
+- Separation of concerns with modular design
+- Security-first approach with input validation
+- Optimized asset loading and management
 
 ## Support
 
@@ -157,4 +118,4 @@ This theme is licensed under the GPL v2 or later.
 
 - Built with [Tailwind CSS](https://tailwindcss.com)
 - Icons by [Lucide](https://lucide.dev)
-- Font by [Google Fonts](https://fonts.google.com)
+- Fonts by [Google Fonts](https://fonts.google.com)
