@@ -2,19 +2,19 @@
 namespace AutoRide\Theme\Core;
 
 class Validation {
-    public function isNotEmpty($value): bool {
-        return !$this->isEmpty($value);
+    public static function isNotEmpty($value): bool {
+        return !self::isEmpty($value);
     }
 
-    public function isEmpty($value): bool {
+    public static function isEmpty($value): bool {
         if (is_array($value)) {
             return empty($value);
         }
         return ($value === null || $value === '' || $value === false);
     }
 
-    public function isColor($value): bool {
-        if ($this->isEmpty($value)) {
+    public static function isColor($value): bool {
+        if (self::isEmpty($value)) {
             return false;
         }
 
@@ -25,7 +25,7 @@ class Validation {
         return ctype_xdigit($value) && (strlen($value) == 6 || strlen($value) == 3);
     }
 
-    public function isNumber($value, int $min = 0, int $max = PHP_INT_MAX): bool {
+    public static function isNumber($value, int $min = 0, int $max = PHP_INT_MAX): bool {
         if (!is_numeric($value)) {
             return false;
         }
@@ -34,48 +34,48 @@ class Validation {
         return $number >= $min && $number <= $max;
     }
 
-    public function isEmail(string $email): bool {
+    public static function isEmail(string $email): bool {
         return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
-    public function isUrl(string $url): bool {
+    public static function isUrl(string $url): bool {
         return (bool) filter_var($url, FILTER_VALIDATE_URL);
     }
 
-    public function isDate(string $date, string $format = 'Y-m-d'): bool {
+    public static function isDate(string $date, string $format = 'Y-m-d'): bool {
         $d = \DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) === $date;
     }
 
-    public function inRange($value, $min, $max): bool {
+    public static function inRange($value, $min, $max): bool {
         if (!is_numeric($value)) {
             return false;
         }
         return $value >= $min && $value <= $max;
     }
 
-    public function isAlpha(string $value): bool {
+    public static function isAlpha(string $value): bool {
         return (bool) preg_match('/^[a-zA-Z]+$/', $value);
     }
 
-    public function isAlphaNumeric(string $value): bool {
+    public static function isAlphaNumeric(string $value): bool {
         return (bool) preg_match('/^[a-zA-Z0-9]+$/', $value);
     }
 
-    public function isSlug(string $value): bool {
+    public static function isSlug(string $value): bool {
         return (bool) preg_match('/^[a-z0-9-]+$/', $value);
     }
 
-    public function matchesRegex(string $value, string $pattern): bool {
+    public static function matchesRegex(string $value, string $pattern): bool {
         return (bool) preg_match($pattern, $value);
     }
 
-    public function isJson(string $string): bool {
+    public static function isJson(string $string): bool {
         json_decode($string);
         return (json_last_error() === JSON_ERROR_NONE);
     }
 
-    public function isSerialized($data): bool {
+    public static function isSerialized($data): bool {
         if (!is_string($data)) {
             return false;
         }
@@ -103,27 +103,5 @@ class Validation {
                 break;
         }
         return false;
-    }
-
-    public function sanitizeHexColor(string $color): string {
-        if ($this->isEmpty($color)) {
-            return '';
-        }
-
-        // Remove any spaces and # if present
-        $color = str_replace(' ', '', $color);
-        $color = ltrim($color, '#');
-
-        // Check if it's a valid hex color
-        if ($this->isColor($color)) {
-            return '#' . $color;
-        }
-
-        return '';
-    }
-
-    public function sanitizeNumber($number, int $min = 0, int $max = PHP_INT_MAX): int {
-        $number = (int) $number;
-        return max($min, min($max, $number));
     }
 }
