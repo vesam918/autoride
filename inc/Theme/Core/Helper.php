@@ -2,12 +2,12 @@
 namespace AutoRide\Theme\Core;
 
 class Helper {
-    public function createClassAttribute(array $classes): string {
+    public static function createClassAttribute(array $classes): string {
         $classes = array_filter($classes);
         return !empty($classes) ? ' class="' . esc_attr(implode(' ', $classes)) . '"' : '';
     }
 
-    public function createStyleAttribute(array $styles): string {
+    public static function createStyleAttribute(array $styles): string {
         if (empty($styles)) {
             return '';
         }
@@ -22,7 +22,7 @@ class Helper {
         return !empty($style_string) ? ' style="' . esc_attr(trim($style_string)) . '"' : '';
     }
 
-    public function sanitizeHexColor(string $color): string {
+    public static function sanitizeHexColor(string $color): string {
         if (empty($color)) {
             return '';
         }
@@ -39,12 +39,12 @@ class Helper {
         return '';
     }
 
-    public function sanitizeNumber($number, int $min = 0, int $max = 999999): int {
+    public static function sanitizeNumber($number, int $min = 0, int $max = 999999): int {
         $number = (int) $number;
         return max($min, min($max, $number));
     }
 
-    public function isColor($value): bool {
+    public static function isColor($value): bool {
         if (empty($value)) {
             return false;
         }
@@ -56,7 +56,7 @@ class Helper {
         return ctype_xdigit($value) && (strlen($value) == 6 || strlen($value) == 3);
     }
 
-    public function isNumber($value, int $min = 0, int $max = 999999): bool {
+    public static function isNumber($value, int $min = 0, int $max = 999999): bool {
         if (!is_numeric($value)) {
             return false;
         }
@@ -65,12 +65,12 @@ class Helper {
         return $number >= $min && $number <= $max;
     }
 
-    public function isEmpty($value): bool {
+    public static function isEmpty($value): bool {
         return empty($value) && $value !== '0';
     }
 
-    public function isNotEmpty($value): bool {
-        return !$this->isEmpty($value);
+    public static function isNotEmpty($value): bool {
+        return !self::isEmpty($value);
     }
 
     public static function getImageUrl(int $attachment_id, string $size = 'full'): string {
