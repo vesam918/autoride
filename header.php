@@ -12,7 +12,6 @@ global $post, $autoride_parent_post, $autoride_sidebar;
 $theme = ThemeSetup::getInstance();
 $post_handler = new Post();
 $header_handler = new Header();
-$validation = new Validation();
 
 // Get parent post
 if (($autoride_parent_post = $post_handler->getPost()) === false) {
@@ -53,16 +52,16 @@ if (($autoride_parent_post = $post_handler->getPost()) === false) {
         $margin_bottom = ThemeSetup::getGlobalOption($autoride_parent_post->post, 'margin_bottom', $prefix, true);
         
         // Apply classes and styles
-        if ($validation->isNotEmpty($css_class)) {
+        if (Validation::isNotEmpty($css_class)) {
             $classes[] = $css_class;
         }
-        if ($validation->isColor($bg_color)) {
+        if (Validation::isColor($bg_color)) {
             $style['background-color'] = '#' . $bg_color;
         }
-        if ($validation->isNumber($margin_top, 0, 99999)) {
+        if (Validation::isNumber($margin_top, 0, 99999)) {
             $style['padding-top'] = (int)$margin_top . 'px';
         }
-        if ($validation->isNumber($margin_bottom, 0, 99999)) {
+        if (Validation::isNumber($margin_bottom, 0, 99999)) {
             $style['padding-bottom'] = (int)$margin_bottom . 'px';
         }
         
@@ -73,7 +72,7 @@ if (($autoride_parent_post = $post_handler->getPost()) === false) {
         
         $sidebar_content = $widget_area->render($widget_area_data);
         
-        if ($validation->isEmpty($sidebar_content)) {
+        if (Validation::isEmpty($sidebar_content)) {
             $sidebar_class = 'theme-page-sidebar-disable';
             $widget_area_data = ['id' => 0, 'location' => 0];
         }
