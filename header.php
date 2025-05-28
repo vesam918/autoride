@@ -1,99 +1,101 @@
-<?php ob_start(); ?>
+<?php
+use AutoRide\Theme\Core\ThemeSetup;
+use AutoRide\Theme\Core\Post;
+use AutoRide\Theme\Core\Header;
+use AutoRide\Theme\Core\Validation;
+use AutoRide\Theme\Core\Helper;
+use AutoRide\Theme\Core\WidgetArea;
+
+global $post, $autoride_parent_post, $autoride_sidebar;
+
+// Initialize theme components
+$theme = ThemeSetup::getInstance();
+$post_handler = new Post();
+$header_handler = new Header();
+$validation = new Validation();
+
+// Get parent post
+if (($autoride_parent_post = $post_handler->getPost()) === false) {
+    $autoride_parent_post = new \stdClass();
+    $autoride_parent_post->post = $post;
+}
+?>
 <!DOCTYPE html>
-<?php
-		global $post,$autoride_ParentPost,$autoride_Sidebar;
+<html <?php language_attributes(); ?>>
+<head>
+    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+    <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
+    <?php wp_head(); ?>
+</head>
 
-		$Theme=new Autoride_Theme();
-		
-		$Post=new Autoride_ThemePost();
-		$Header=new Autoride_ThemeHeader();
-		$Validation=new Autoride_ThemeValidation();
-		
-		if(($autoride_ParentPost=$Post->getPost())===false) 
-		{
-			$autoride_ParentPost=new stdClass();
-			$autoride_ParentPost->post=$post;
-		}
-?>
-		<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
-
-			<head>
-				<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
-				<meta name="format-detection" content="telephone=no"/>
-				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-				<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
-<?php				
-		wp_head(); 
-?>
-			</head>
-
-			<body <?php body_class(); ?>>
-				
-				<div class="theme-page">
-				
-					<?php // This output has been safely escaped in the following file: class/Theme.Header.class.php ?>
-					<?php echo Autoride_ThemeHeader::create($autoride_ParentPost->post); // Data escaped ok ?>
-<?php
-		$style=array();
-		$class=array('theme-page-content');
-		
-		$prefix=Autoride_ThemeOption::getOptionPrefix($autoride_ParentPost->post);
-		
-		$meta=Autoride_ThemeOption::getPostMeta($autoride_ParentPost->post);
-		
-		$cssClass=Autoride_ThemeOption::getGlobalOption($autoride_ParentPost->post,'class',$prefix,true);
-		$backgroundColor=Autoride_ThemeOption::getGlobalOption($autoride_ParentPost->post,'background_color',$prefix,true);
-		$marginTop=Autoride_ThemeOption::getGlobalOption($autoride_ParentPost->post,'margin_top',$prefix,true);
-		$marginBottom=Autoride_ThemeOption::getGlobalOption($autoride_ParentPost->post,'margin_bottom',$prefix,true);
-		
-		if($Validation->isNotEmpty($cssClass))
-			array_push($class,$cssClass);
-		if($Validation->isColor($backgroundColor))
-			$style['background-color']='#'.$backgroundColor;
-		if($Validation->isNumber($marginTop,0,99999))
-			$style['padding-top']=(int)$marginTop.'px';
-		if($Validation->isNumber($marginBottom,0,99999))
-			$style['padding-bottom']=(int)$marginBottom.'px'; 
-?>
-					<div<?php echo Autoride_ThemeHelper::createClassAttribute($class).Autoride_ThemeHelper::createStyleAttribute($style); ?>>
-<?php
-		/***/
-
-		$WidgetArea=new Autoride_ThemeWidgetArea();
-						
-		$widgetAreaData=$WidgetArea->getWidgetAreaByPost($autoride_ParentPost->post,'widget_area_sidebar',true);
-		$class=$WidgetArea->getWidgetAreaCSSClass($widgetAreaData);	
-		
-		$sidebarContent=Autoride_ThemeWidgetArea::createS($widgetAreaData);
-		
-		if($Validation->isEmpty($sidebarContent))
-		{
-			$class='theme-page-sidebar-disable';
-			$widgetAreaData=array('id'=>0,'location'=>0);
-		}
-		
-		$autoride_Sidebar=false;
-		
-		if(in_array($widgetAreaData['location'],array(1,2)))
-			$autoride_Sidebar=true;
-		
-		/***/
-		
-		if((function_exists('has_blocks')) && (has_blocks()))
-			$class.=' theme-gutenberg-block';
-?>
-						<div class="theme-main theme-clear-fix <?php echo esc_attr($class); ?>">	
-<?php
-		if($widgetAreaData['location']==1)
-		{
-?>
-							<div class="theme-column-left"><?php $WidgetArea->create($widgetAreaData); ?></div>
-							<div class="theme-column-right">
-<?php
-		}
-		elseif($widgetAreaData['location']==2)
-		{
-?>
-							<div class="theme-column-left">
-<?php
-		}
+<body <?php body_class(); ?>>
+    <?php wp_body_open(); ?>
+    
+    <div class="min-h-screen bg-white">
+        <?php 
+        // Header
+        echo $header_handler->render($autoride_parent_post->post);
+        
+        // Page content setup
+        $style = [];
+        $classes = ['theme-page-content'];
+        
+        $prefix = ThemeSetup::getOptionPrefix($autoride_parent_post->post);
+        $meta = ThemeSetup::getPostMeta($autoride_parent_post->post);
+        
+        // Get theme options
+        $css_class = ThemeSetup::getGlobalOption($autoride_parent_post->post, 'class', $prefix, true);
+        $bg_color = ThemeSetup::getGlobalOption($autoride_parent_post->post, 'background_color', $prefix, true);
+        $margin_top = ThemeSetup::getGlobalOption($autoride_parent_post->post, 'margin_top', $prefix, true);
+        $margin_bottom = ThemeSetup::getGlobalOption($autoride_parent_post->post, 'margin_bottom', $prefix, true);
+        
+        // Apply classes and styles
+        if ($validation->isNotEmpty($css_class)) {
+            $classes[] = $css_class;
+        }
+        if ($validation->isColor($bg_color)) {
+            $style['background-color'] = '#' . $bg_color;
+        }
+        if ($validation->isNumber($margin_top, 0, 99999)) {
+            $style['padding-top'] = (int)$margin_top . 'px';
+        }
+        if ($validation->isNumber($margin_bottom, 0, 99999)) {
+            $style['padding-bottom'] = (int)$margin_bottom . 'px';
+        }
+        
+        // Widget area setup
+        $widget_area = new WidgetArea();
+        $widget_area_data = $widget_area->getWidgetAreaByPost($autoride_parent_post->post, 'widget_area_sidebar', true);
+        $sidebar_class = $widget_area->getWidgetAreaCSSClass($widget_area_data);
+        
+        $sidebar_content = $widget_area->render($widget_area_data);
+        
+        if ($validation->isEmpty($sidebar_content)) {
+            $sidebar_class = 'theme-page-sidebar-disable';
+            $widget_area_data = ['id' => 0, 'location' => 0];
+        }
+        
+        $autoride_sidebar = false;
+        if (in_array($widget_area_data['location'], [1, 2])) {
+            $autoride_sidebar = true;
+        }
+        
+        // Add Gutenberg support
+        if (function_exists('has_blocks') && has_blocks()) {
+            $sidebar_class .= ' theme-gutenberg-block';
+        }
+        ?>
+        
+        <div <?php echo Helper::createClassAttribute($classes) . Helper::createStyleAttribute($style); ?>>
+            <div class="theme-main theme-clear-fix <?php echo esc_attr($sidebar_class); ?>">
+                <?php if ($widget_area_data['location'] == 1): ?>
+                    <div class="theme-column-left">
+                        <?php $widget_area->render($widget_area_data); ?>
+                    </div>
+                    <div class="theme-column-right">
+                <?php elseif ($widget_area_data['location'] == 2): ?>
+                    <div class="theme-column-left">
+                <?php endif; ?>

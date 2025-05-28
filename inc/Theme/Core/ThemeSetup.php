@@ -7,18 +7,54 @@ use AutoRide\Theme\Features\MaintenanceMode;
 use AutoRide\Theme\Integration\WooCommerce;
 
 class ThemeSetup {
+    private static ?ThemeSetup $instance = null;
     private AssetsManager $assets;
     private AdminSetup $admin;
+    private static array $options = [];
     
     public function __construct(AssetsManager $assets, AdminSetup $admin) {
         $this->assets = $assets;
         $this->admin = $admin;
+        self::$options = get_option('autoride_theme_options', []);
+    }
+
+    public static function getInstance(): ThemeSetup {
+        if (self::$instance === null) {
+            self::$instance = new self(
+                new AssetsManager(),
+                new AdminSetup()
+            );
+        }
+        return self::$instance;
     }
 
     public function init(): void {
         $this->setupThemeSupport();
         $this->registerHooks();
         $this->initializeFeatures();
+    }
+
+    public static function getOption(string $key, $default = null) {
+        return self::$options[$key] ?? $default;
+    }
+
+    public static function getOptionPrefix($post): string {
+        if (is_singular()) {
+            return 'single_' . get_post_type($post) . '_';
+        }
+        return 'archive_';
+    }
+
+    public static function getPostMeta($post): array {
+        $meta = get_post_meta(get_the_ID($post));
+        return is_array($meta) ? $meta : [];
+    }
+
+    public static function getGlobalOption($post, string $key, string $prefix = '', bool $usePrefix = false): string {
+        if ($usePrefix) {
+            $key = $prefix . $key;
+        }
+        return self::getOption($key, '');
     }
 
     private function setupThemeSupport(): void {

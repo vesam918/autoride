@@ -55,6 +55,9 @@ function autoride_init(): void {
     if (is_admin()) {
         $admin_setup->init();
     }
+
+    // Register widget areas
+    AutoRide\Theme\Core\WidgetArea::registerSidebars();
 }
 
 // Hook initialization
@@ -96,41 +99,14 @@ function autoride_setup(): void {
         'script',
         'style',
     ]);
-}
-add_action('after_setup_theme', 'autoride_setup');
 
-// Register theme menus
-function autoride_register_menus(): void {
+    // Register nav menus
     register_nav_menus([
         'primary' => __('Primary Menu', 'autoride'),
         'footer'  => __('Footer Menu', 'autoride'),
     ]);
 }
-add_action('init', 'autoride_register_menus');
-
-// Register sidebars
-function autoride_register_sidebars(): void {
-    register_sidebar([
-        'name'          => __('Primary Sidebar', 'autoride'),
-        'id'            => 'sidebar-1',
-        'description'   => __('Add widgets here to appear in your sidebar.', 'autoride'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h2 class="widget-title">',
-        'after_title'   => '</h2>',
-    ]);
-
-    register_sidebar([
-        'name'          => __('Footer Widget Area', 'autoride'),
-        'id'            => 'footer-1',
-        'description'   => __('Add widgets here to appear in your footer.', 'autoride'),
-        'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h2 class="widget-title">',
-        'after_title'   => '</h2>',
-    ]);
-}
-add_action('widgets_init', 'autoride_register_sidebars');
+add_action('after_setup_theme', 'autoride_setup');
 
 // Security enhancements
 function autoride_security_headers(): void {
